@@ -44,11 +44,11 @@ function App() {
 
     // Jouer la musique une seule fois au montage
     useEffect(() => {
-        if (!hasPlayedMusic.current) {
+        if (!hasPlayedMusic.current && gameStarted) {
             playGameLoop();
             hasPlayedMusic.current = true;
         }
-    }, [playGameLoop]);
+    }, [playGameLoop, gameStarted]);
 
     // Gérer la touche ESC pour pause
     useEffect(() => {
