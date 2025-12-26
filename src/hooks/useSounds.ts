@@ -31,7 +31,8 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     useEffect(() => {
         const MUSIC_VOLUME_FACTOR = 0.2;
         const SFX_VOLUME_FACTOR = 0.3;
-        //
+
+        // Fonction pour mettre à jour le volume d'un son
         const updateVolume = (ref: React.RefObject<HTMLAudioElement | null>, volume: number) => {
             if (ref.current) {
                 ref.current.volume = volume;

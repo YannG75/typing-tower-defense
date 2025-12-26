@@ -7,7 +7,6 @@ import {useKeyboard} from "./hooks/useKeyboard.ts";
 import {useGameLoop} from "./hooks/useGameLoop.ts";
 import {getRandomDirection} from './utils/spawnHelpers';
 import {GameOver} from "./components/GameOver.tsx";
-// import {LevelUp} from "./components/LevelUp.tsx";
 import {useSounds} from "./hooks/useSounds.ts";
 import {StartMenu} from './components/StartMenu';
 import { PauseMenu } from './components/PauseMenu';
@@ -37,7 +36,7 @@ function App() {
 
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-    const hasPlayedMusic = useRef(false); // ← Nouveau
+    const hasPlayedMusic = useRef(false);
 
     const handleStart = () => {
         setGameStarted(true);
@@ -77,9 +76,9 @@ function App() {
         const newLetter: LetterData = {
             id: Date.now().toString() + Math.random(),
             character: AVAILABLE_LETTERS[Math.floor(Math.random() * AVAILABLE_LETTERS.length)],
-            x: Math.random() * (window.innerWidth - 100), // Position X aléatoire
+            x: Math.random() * (window.innerWidth - 100),
             y: '-55vh',
-            speed: getSpeed(level), // On ajustera la vitesse plus tard avec la difficulté
+            speed: getSpeed(level),
             direction: getRandomDirection()
         };
 
@@ -179,7 +178,7 @@ function App() {
         if (newLives <= 0) {
             setIsGameOver(true);
             playGameOver();
-            setLetters([]); // plus aucune lettre si game over
+            setLetters([]);
         }
     };
 

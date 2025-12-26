@@ -169,6 +169,7 @@ interface VolumeSliderProps {
 const VolumeSlider: React.FC<VolumeSliderProps> = ({label, value, onChange}) => {
     return (
         <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+            {/* Label et valeur du slider */}
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -180,6 +181,7 @@ const VolumeSlider: React.FC<VolumeSliderProps> = ({label, value, onChange}) => 
                 <span>{Math.round(value * 100)}%</span>
             </div>
 
+            {/* Slider HTML5 personnalisé */}
             <input
                 type="range"
                 min="0"
