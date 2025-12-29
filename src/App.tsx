@@ -44,18 +44,28 @@ function App() {
         setGameStarted(true);
     };
 
+    const TABLET_BREAKPOINT = 1024; // Couvre mobiles + tablettes
 
     useEffect(() => {
-        setIsMobile(window.innerWidth <= 600);
+        const isMobileOrTablet = (): boolean => {
+            // Combinaison : taille d'écran + détection tactile
+            const isSmallScreen = window.innerWidth <= TABLET_BREAKPOINT;
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 600);
+            return isSmallScreen || hasTouch;
         };
 
-        window.addEventListener('resize', handleResize);
+        const handleChange = () => {
+            console.log(isMobileOrTablet() ? 'Mobile detected' : 'Desktop detected')
+            setIsMobile(isMobileOrTablet());
+        };
 
-        // Cleanup
-        return () => window.removeEventListener('resize', handleResize);
+        handleChange();
+        window.addEventListener('resize', handleChange);
+
+        return () => {
+            window.removeEventListener('resize', handleChange);
+        };
     }, []);
 
     // Jouer la musique une seule fois au montage
