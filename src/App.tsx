@@ -12,12 +12,14 @@ import {StartMenu} from './components/StartMenu';
 import { PauseMenu } from './components/PauseMenu';
 import {Particles} from "./components/Particles.tsx";
 import {useLocalStorage} from "./hooks/useLocalStorage.ts";
+import {MobileIncoming} from "./components/MobileIncoming.tsx";
 
 
 // Lettres disponibles
 const AVAILABLE_LETTERS = ['Z', 'Q', 'S', 'D'];
 
 function App() {
+    const [isMobile, setIsMobile] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [score, setScore] = useState<number>(0);
@@ -41,6 +43,20 @@ function App() {
     const handleStart = () => {
         setGameStarted(true);
     };
+
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth <= 600);
+
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 600);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Jouer la musique une seule fois au montage
     useEffect(() => {
@@ -184,7 +200,10 @@ function App() {
 
     return (
         <div className="game-container">
-            {!gameStarted && <StartMenu onStart={handleStart}/>}
+
+            {isMobile && <MobileIncoming />}
+            {!gameStarted && !isMobile && <StartMenu onStart={handleStart}/>}
+
 
             {gameStarted && (
                 <>
