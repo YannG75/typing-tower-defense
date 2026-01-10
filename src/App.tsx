@@ -232,7 +232,9 @@ function App() {
         };
 
         return (
-            <div className="game-container">
+            <div className="game-container"
+                 onSelect={() => {return false;}}
+            >
 
                 {isMobile && !devMod && <MobileIncoming/>}
                 {!gameStarted && !isMobile || (!gameStarted && isMobile && devMod) && <StartMenu onStart={handleStart} isMobile={isMobile}/>}

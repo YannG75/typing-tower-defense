@@ -56,9 +56,7 @@ export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handle
                         boxShadow: '0 0 10px #ffd93d',
                         padding: '10px',
                     }}
-                         onSelect={() => {
-                             return false;
-                         }}
+                        
                     >
                         <p style={{
                             fontSize: '1.5rem',
@@ -79,9 +77,7 @@ export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handle
                         boxShadow: '0 0 10px #ffd93d',
                         padding: '10px',
                     }}
-                         onSelect={() => {
-                             return false;
-                         }}>
+                        >
                         <p style={{
                             fontSize: '1.5rem',
                             textAlign: 'center',
@@ -101,9 +97,7 @@ export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handle
                         boxShadow: '0 0 10px #ffd93d',
                         padding: '10px',
                     }}
-                         onSelect={() => {
-                             return false;
-                         }}>
+                        >
                         <p style={{
                             fontSize: '1.5rem',
                             textAlign: 'center',
@@ -123,9 +117,7 @@ export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handle
                         boxShadow: '0 0 10px #ffd93d',
                         padding: '10px',
                     }}
-                         onSelect={() => {
-                             return false;
-                         }}>
+                        >
                         <p style={{
                             fontSize: '1.5rem',
                             textAlign: 'center',
