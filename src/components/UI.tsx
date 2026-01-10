@@ -64,6 +64,7 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
                            userSelect: 'none'
                        }}
+                          className={'no-select'}
                           onTouchStart={() => {
                               console.log('Z');
                               handleKeyTap && handleKeyTap('Z');
@@ -83,6 +84,7 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
                            userSelect: 'none'
                        }}
+                          className={'no-select'}
                        onTouchStart={() => {
                            console.log('Q');
                            handleKeyTap && handleKeyTap('Q');
@@ -102,6 +104,7 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
                            userSelect: 'none'
                        }}
+                          className={'no-select'}
                        onTouchStart={() => {
                            console.log('S');
                            handleKeyTap && handleKeyTap('S');
@@ -119,8 +122,9 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            fontWeight: 'bold',
                            color: '#ffd93d',
                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                           userSelect: 'none'
+                           userSelect: 'none',
                        }}
+
                           onTouchStart={() =>
                           {
                               console.log('D');

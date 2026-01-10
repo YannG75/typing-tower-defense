@@ -48,3 +48,8 @@ body {
             ),
             #0a0a0a;
 }
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
