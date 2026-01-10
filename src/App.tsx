@@ -251,7 +251,7 @@ function App() {
 
                         <Base lives={lives}/>
                         {
-                            isGameOver && <GameOver score={score} highScore={highScore} onRestart={handleRestart}/>
+                            isGameOver && <GameOver score={score} highScore={highScore} onRestart={handleRestart} isMobile={isMobile}/>
                         }
                     </>
                 )}

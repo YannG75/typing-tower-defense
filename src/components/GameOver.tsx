@@ -5,9 +5,10 @@ interface GameOverProps {
     score: number;
     highScore: number;
     onRestart: () => void;
+    isMobile?: boolean;
 }
 
-export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart }) => {
+export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart, isMobile }) => {
     const isNewHighScore = score >= highScore;
     return (
         <motion.div
@@ -25,7 +26,7 @@ export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart 
                 textAlign: 'center',
                 boxShadow: '0 0 40px rgba(255, 107, 107, 0.6), inset 0 0 40px rgba(255, 107, 107, 0.1)',
                 zIndex: 100,
-                minWidth: '400px',
+                minWidth: isMobile ? '90%' :'400px',
             }}
         >
             <motion.h1

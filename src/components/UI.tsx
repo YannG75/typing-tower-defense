@@ -61,7 +61,8 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textAlign: 'center',
                            fontWeight: 'bold',
                            color: '#ffd93d',
-                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)'
+                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
+                           userSelect: 'none'
                        }}
                           onTouchStart={() => {
                               console.log('Z');
@@ -79,7 +80,8 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textAlign: 'center',
                            fontWeight: 'bold',
                            color: '#ffd93d',
-                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)'
+                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
+                           userSelect: 'none'
                        }}
                        onTouchStart={() => {
                            console.log('Q');
@@ -97,7 +99,8 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textAlign: 'center',
                            fontWeight: 'bold',
                            color: '#ffd93d',
-                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)'
+                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
+                           userSelect: 'none'
                        }}
                        onTouchStart={() => {
                            console.log('S');
@@ -115,7 +118,8 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                            textAlign: 'center',
                            fontWeight: 'bold',
                            color: '#ffd93d',
-                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)'
+                           textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
+                           userSelect: 'none'
                        }}
                           onTouchStart={() =>
                           {
