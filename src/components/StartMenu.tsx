@@ -1,27 +1,31 @@
-import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import {motion} from 'framer-motion';
+import {useEffect} from 'react';
 import * as React from "react";
 
 interface StartMenuProps {
     onStart: () => void;
+    isMobile: boolean;
 }
 
-export const StartMenu: React.FC<StartMenuProps> = ({ onStart }) => {
+export const StartMenu: React.FC<StartMenuProps> = ({onStart, isMobile}) => {
     // Démarrer le jeu sur n'importe quelle touche
     useEffect(() => {
-        const handleKeyPress = () => {
+        const handleKeyPressOrTap = () => {
             onStart();
         };
-
-        window.addEventListener('keydown', handleKeyPress);
-        return () => window.removeEventListener('keydown', handleKeyPress);
+        window.addEventListener('keydown', handleKeyPressOrTap);
+        window.addEventListener('touchstart', handleKeyPressOrTap);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPressOrTap);
+            window.removeEventListener('touchstart', handleKeyPressOrTap);
+        }
     }, [onStart]);
 
     return (
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
             style={{
                 position: 'absolute',
                 top: 0,
@@ -38,9 +42,9 @@ export const StartMenu: React.FC<StartMenuProps> = ({ onStart }) => {
         >
             {/* Titre principal */}
             <motion.h1
-                initial={{ y: -50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
+                initial={{y: -50, opacity: 0}}
+                animate={{y: 0, opacity: 1}}
+                transition={{delay: 0.3, duration: 0.8}}
                 style={{
                     fontSize: '3rem',
                     color: '#ffd93d',
@@ -51,15 +55,15 @@ export const StartMenu: React.FC<StartMenuProps> = ({ onStart }) => {
                 }}
             >
                 TYPING
-                <br />
+                <br/>
                 LETTER
-                <br />
+                <br/>
                 DEFENSE
             </motion.h1>
 
             {/* Sous-titre clignotant */}
             <motion.div
-                initial={{ opacity: 0 }}
+                initial={{opacity: 0}}
                 animate={{
                     opacity: [0, 1, 1, 0],
                 }}
@@ -73,16 +77,17 @@ export const StartMenu: React.FC<StartMenuProps> = ({ onStart }) => {
                     fontSize: '1rem',
                     color: '#6bcf7f',
                     textShadow: '2px 2px 0px rgba(0, 0, 0, 0.8)',
+                    textAlign: 'center',
                 }}
             >
-                PRESS ANY KEY
+                PRESS ANY KEY {isMobile && 'OR TAP SCREEN'} TO START
             </motion.div>
 
             {/* Instructions */}
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                transition={{delay: 1.5}}
                 style={{
                     position: 'absolute',
                     bottom: '50px',
@@ -94,7 +99,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({ onStart }) => {
                 }}
             >
                 USE KEYBOARD TO DESTROY LETTERS (ZQSD)
-                <br />
+                <br/>
                 PROTECT YOUR BASE
             </motion.div>
         </motion.div>

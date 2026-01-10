@@ -68,7 +68,6 @@ export const Base: React.FC<BaseProps> = ({lives}) => {
                             inset 0 0 20px rgba(255, 255, 255, 0.2),
                             0 0 40px rgba(255, 107, 107, 0.4)
                         `,
-                    backgroundSize: '8px 8px',
                     imageRendering: 'pixelated',
                     position: 'relative',
                     display: 'flex',

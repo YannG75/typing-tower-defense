@@ -9,7 +9,7 @@ import {getRandomDirection} from './utils/spawnHelpers';
 import {GameOver} from "./components/GameOver.tsx";
 import {useSounds} from "./hooks/useSounds.ts";
 import {StartMenu} from './components/StartMenu';
-import { PauseMenu } from './components/PauseMenu';
+import {PauseMenu} from './components/PauseMenu';
 import {Particles} from "./components/Particles.tsx";
 import {useLocalStorage} from "./hooks/useLocalStorage.ts";
 import {MobileIncoming} from "./components/MobileIncoming.tsx";
@@ -33,7 +33,7 @@ function App() {
     const [highScore, setHighScore] = useLocalStorage('high-score', 0);
     const {playExplosion, playHit, playGameOver, playGameLoop} = useSounds(musicVolume, sfxVolume);
 
-    const [particles, setParticles] = useState<Array<{id: string, x: number, y: number, color: string}>>([]);
+    const [particles, setParticles] = useState<Array<{ id: string, x: number, y: number, color: string }>>([]);
 
 
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -119,7 +119,9 @@ function App() {
         setLetters([]);
         setDestroyedLetters([]);
         setIsGameOver(false);
-        if (isPaused) { setIsPaused(false);}
+        if (isPaused) {
+            setIsPaused(false);
+        }
     }
 
     const handleResume = () => {
@@ -151,7 +153,7 @@ function App() {
         isActive: !isGameOver && gameStarted && !isPaused
     })
 
-    useKeyboard((key) => {
+    const handleKey = (key: string) => {
         // Chercher une lettre qui correspond à la touche tapée
         if (isPaused) return;
 
@@ -191,68 +193,72 @@ function App() {
                 setDestroyedLetters((prev) => prev.filter((id) => id !== matchingLetter.id));
             }, 300);
         }
-    })
+    }
 
-    const handleReachBase = (id: string) => {
-        // Retirer une vie
-        const newLives = lives - 1;
-        setLives(newLives);
-        playHit()
-        setLetters((prev) => prev.filter((letter) => letter.id !== id));
+        useKeyboard((key) => {
+            handleKey(key);
+        });
 
-        // Game Over si plus de vies
-        if (newLives <= 0) {
-            setIsGameOver(true);
-            playGameOver();
-            setLetters([]);
-        }
-    };
+        const handleReachBase = (id: string) => {
+            // Retirer une vie
+            const newLives = lives - 1;
+            setLives(newLives);
+            playHit()
+            setLetters((prev) => prev.filter((letter) => letter.id !== id));
 
-    return (
-        <div className="game-container">
+            // Game Over si plus de vies
+            if (newLives <= 0) {
+                setIsGameOver(true);
+                playGameOver();
+                setLetters([]);
+            }
+        };
 
-            {isMobile && <MobileIncoming />}
-            {!gameStarted && !isMobile && <StartMenu onStart={handleStart}/>}
+        return (
+            <div className="game-container">
+
+                {/*{isMobile && <MobileIncoming/>}*/}
+                {!gameStarted && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
 
 
-            {gameStarted && (
-                <>
-                    <UI score={score} level={level} highScore={highScore}/>
+                {gameStarted && (
+                    <>
+                        <UI score={score} level={level} highScore={highScore} isMobile={isMobile} handleKeyTap={handleKey}/>
 
-                    {letters.map((letter) => (
-                        <Letter
-                            key={letter.id}
-                            letter={letter}
-                            onReachBase={handleReachBase}
-                            isDestroyed={destroyedLetters.includes(letter.id)}
-                            isPaused={isPaused}
-                        />
-                    ))}
+                        {letters.map((letter) => (
+                            <Letter
+                                key={letter.id}
+                                letter={letter}
+                                onReachBase={handleReachBase}
+                                isDestroyed={destroyedLetters.includes(letter.id)}
+                                isPaused={isPaused}
+                            />
+                        ))}
 
-                    {isPaused && (
-                        <PauseMenu
-                            onResume={handleResume}
-                            onRestart={handleRestart}
-                            onQuit={handleQuitToMenu}
-                            musicVolume={musicVolume}
-                            sfxVolume={sfxVolume}
-                            onMusicVolumeChange={setMusicVolume}
-                            onSfxVolumeChange={setSfxVolume}
-                        />
-                    )}
+                        {isPaused && (
+                            <PauseMenu
+                                onResume={handleResume}
+                                onRestart={handleRestart}
+                                onQuit={handleQuitToMenu}
+                                musicVolume={musicVolume}
+                                sfxVolume={sfxVolume}
+                                onMusicVolumeChange={setMusicVolume}
+                                onSfxVolumeChange={setSfxVolume}
+                            />
+                        )}
 
-                    {particles.map((particle) => (
-                        <Particles key={particle.id} x={particle.x} y={particle.y} color={particle.color} />
-                    ))}
+                        {particles.map((particle) => (
+                            <Particles key={particle.id} x={particle.x} y={particle.y} color={particle.color}/>
+                        ))}
 
-                    <Base lives={lives}/>
-                    {
-                        isGameOver && <GameOver score={score} highScore={highScore} onRestart={handleRestart}/>
-                    }
-                </>
-            )}
-        </div>
-    );
-}
+                        <Base lives={lives}/>
+                        {
+                            isGameOver && <GameOver score={score} highScore={highScore} onRestart={handleRestart}/>
+                        }
+                    </>
+                )}
+            </div>
+        );
+    }
 
-export default App;
+    export default App;
