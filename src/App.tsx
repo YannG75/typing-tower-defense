@@ -232,8 +232,7 @@ function App() {
         };
 
         return (
-            <div className="game-container"
-                 onSelect={() => {return false;}}
+            <div className="game-container no-select"
             >
 
                 {isMobile && !devMod && <MobileIncoming/>}
