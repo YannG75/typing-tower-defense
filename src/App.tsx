@@ -12,8 +12,6 @@ import {StartMenu} from './components/StartMenu';
 import {PauseMenu} from './components/PauseMenu';
 import {Particles} from "./components/Particles.tsx";
 import {useLocalStorage} from "./hooks/useLocalStorage.ts";
-import {MobileIncoming} from "./components/MobileIncoming.tsx";
-
 
 // Lettres disponibles
 const AVAILABLE_LETTERS = ['Z', 'Q', 'S', 'D'];
