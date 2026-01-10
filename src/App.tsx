@@ -12,6 +12,7 @@ import {StartMenu} from './components/StartMenu';
 import {PauseMenu} from './components/PauseMenu';
 import {Particles} from "./components/Particles.tsx";
 import {useLocalStorage} from "./hooks/useLocalStorage.ts";
+import {MobileIncoming} from "./components/MobileIncoming";
 
 // Lettres disponibles
 const AVAILABLE_LETTERS = ['Z', 'Q', 'S', 'D'];
@@ -27,6 +28,8 @@ function App() {
     const [destroyedLetters, setDestroyedLetters] = useState<string[]>([]);
     const [musicVolume, setMusicVolume] = useLocalStorage('music-volume', 1);
     const [sfxVolume, setSfxVolume] = useLocalStorage('sfx-volume', 1);
+    const [tapCount, setTapCount] = useState(0);
+    const [devMod, setDevMod] = useState(false);
 
     const [highScore, setHighScore] = useLocalStorage('high-score', 0);
     const {playExplosion, playHit, playGameOver, playGameLoop} = useSounds(musicVolume, sfxVolume);
@@ -126,6 +129,22 @@ function App() {
         setIsPaused(false);
     };
 
+
+
+    useEffect(() => {
+        const handleCustomTap = () => {
+            if (tapCount < 2) {
+                setTapCount((prev) => prev + 1);
+            }
+            if (tapCount === 2) {
+                if (!devMod) setDevMod(true);
+            }
+        }
+
+        window.addEventListener('touchstart', handleCustomTap);
+        return () => window.removeEventListener('touchstart', handleCustomTap);
+    }, [tapCount, setDevMod]);
+
     const handleQuitToMenu = () => {
         setGameStarted(false);
         setIsPaused(false);
@@ -215,8 +234,8 @@ function App() {
         return (
             <div className="game-container">
 
-                {/*{isMobile && <MobileIncoming/>}*/}
-                {!gameStarted && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
+                {isMobile && !devMod && <MobileIncoming/>}
+                {!gameStarted && !isMobile || (!gameStarted && isMobile && devMod) && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
 
 
                 {gameStarted && (

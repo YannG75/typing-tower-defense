@@ -36,7 +36,7 @@ export const UI: React.FC<UIProps> = ({ score, level, highScore, isMobile, handl
                <div
                    style={{
                        position: 'absolute',
-                       bottom: '20px',
+                       bottom: '80px',
                        left: '20px',
                        right: '20px',
                        fontSize: '0.8rem',
