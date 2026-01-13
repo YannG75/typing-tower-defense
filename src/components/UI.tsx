@@ -1,11 +1,12 @@
 import * as React from "react";
+import {MobileButton} from "./MobileButton.tsx";
 
 interface UIProps {
     score: number;
     level: number;
     highScore: number;
     isMobile?: boolean;
-    handleKeyTap?: (key: string) => void;
+    handleKeyTap: (key: string) => void;
 }
 
 export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handleKeyTap}) => {
@@ -51,88 +52,13 @@ export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handle
                         textTransform: 'uppercase'
                     }}
                 >
-                    <div style={{
-                        border: '2px solid #ffd93d',
-                        boxShadow: '0 0 10px #ffd93d',
-                        padding: '10px',
-                    }}
-                        
-                    >
-                        <p style={{
-                            fontSize: '1.5rem',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            color: '#ffd93d',
-                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                        }}
-                           className={'no-select'}
-                           onTouchStart={() => {
-                               console.log('Z');
-                               handleKeyTap && handleKeyTap('Z');
-                           }}
-                        >Z</p>
-                    </div>
-                    <div style={{
-                        border: '2px solid #ffd93d',
-                        boxShadow: '0 0 10px #ffd93d',
-                        padding: '10px',
-                    }}
-                        >
-                        <p style={{
-                            fontSize: '1.5rem',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            color: '#ffd93d',
-                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                        }}
-                           className={'no-select'}
-                           onTouchStart={() => {
-                               console.log('Q');
-                               handleKeyTap && handleKeyTap('Q');
-                           }}
-                        >Q</p>
-                    </div>
-                    <div style={{
-                        border: '2px solid #ffd93d',
-                        boxShadow: '0 0 10px #ffd93d',
-                        padding: '10px',
-                    }}
-                        >
-                        <p style={{
-                            fontSize: '1.5rem',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            color: '#ffd93d',
-                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                        }}
-                           className={'no-select'}
-                           onTouchStart={() => {
-                               console.log('S');
-                               handleKeyTap && handleKeyTap('S');
-                           }}
-                        >S</p>
-                    </div>
-                    <div style={{
-                        border: '2px solid #ffd93d',
-                        boxShadow: '0 0 10px #ffd93d',
-                        padding: '10px',
-                    }}
-                        >
-                        <p style={{
-                            fontSize: '1.5rem',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            color: '#ffd93d',
-                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                        }}
-                           className={'no-select'}
-                           onTouchStart={() => {
-                               console.log('D');
-                               handleKeyTap && handleKeyTap('D');
-                           }
-                           }
-                        >D</p>
-                    </div>
+                    {['Z', 'Q', 'S', 'D'].map((letter) => (
+                        <MobileButton
+                            key={letter}
+                            letter={letter}
+                            onTap={handleKeyTap}
+                        />
+                    ))}
                 </div>
             )}
         </>

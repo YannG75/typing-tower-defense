@@ -236,7 +236,7 @@ function App() {
             >
 
                 {isMobile && !devMod && <MobileIncoming/>}
-                {!gameStarted && !isMobile || (!gameStarted && isMobile && devMod) && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
+                {(!gameStarted && !isMobile || (!gameStarted && isMobile && devMod)) && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
 
 
                 {gameStarted && (
