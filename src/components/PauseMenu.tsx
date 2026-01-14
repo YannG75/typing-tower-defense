@@ -1,6 +1,8 @@
 import {motion} from 'framer-motion';
 import * as React from "react";
 import {useState} from "react";
+import {MenuButton} from "./MenuButton";
+import {VolumeSlider} from "./VolumeSlider";
 
 interface PauseMenuProps {
     onResume: () => void;
@@ -57,7 +59,6 @@ export const PauseMenu: React.FC<PauseMenuProps> =
                 </motion.h1>
 
                 {!showOptions ? (
-                    // Menu principal
                     <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
                         <MenuButton onClick={onResume} delay={0.2}>
                             RESUME
@@ -76,7 +77,6 @@ export const PauseMenu: React.FC<PauseMenuProps> =
                         </MenuButton>
                     </div>
                 ) : (
-                    // Menu options
                     <motion.div
                         initial={{opacity: 0, x: 50}}
                         animate={{opacity: 1, x: 0}}
@@ -87,21 +87,18 @@ export const PauseMenu: React.FC<PauseMenuProps> =
                             minWidth: '400px',
                         }}
                     >
-                        {/* Volume Musique */}
                         <VolumeSlider
                             label="MUSIC"
                             value={musicVolume}
                             onChange={onMusicVolumeChange}
                         />
 
-                        {/* Volume SFX */}
                         <VolumeSlider
                             label="SFX"
                             value={sfxVolume}
                             onChange={onSfxVolumeChange}
                         />
 
-                        {/* Bouton retour */}
                         <MenuButton onClick={() => setShowOptions(false)} delay={0}>
                             BACK
                         </MenuButton>
@@ -124,78 +121,3 @@ export const PauseMenu: React.FC<PauseMenuProps> =
             </motion.div>
         );
     };
-
-// Composant bouton réutilisable
-interface MenuButtonProps {
-    onClick: () => void;
-    delay: number;
-    children: React.ReactNode;
-}
-
-const MenuButton: React.FC<MenuButtonProps> = ({onClick, delay, children}) => {
-    return (
-        <motion.button
-            initial={{x: -50, opacity: 0}}
-            animate={{x: 0, opacity: 1, transition: {delay}}}
-            whileHover={{scale: 1.1, transition: {duration: 0.2}}}
-            whileTap={{scale: 0.95}}
-            onClick={onClick}
-            style={{
-                padding: '1rem 3rem',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                color: '#ffffff',
-                background: '#906bcf',
-                border: '4px solid #ffffff',
-                cursor: 'pointer',
-                boxShadow: '0 4px 0px rgba(0, 0, 0, 0.8)',
-                fontFamily: 'inherit',
-                letterSpacing: '1px',
-                minWidth: '250px',
-            }}
-        >
-            {children}
-        </motion.button>
-    );
-};
-
-// Composant slider de volume
-interface VolumeSliderProps {
-    label: string;
-    value: number;
-    onChange: (value: number) => void;
-}
-
-const VolumeSlider: React.FC<VolumeSliderProps> = ({label, value, onChange}) => {
-    return (
-        <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
-            {/* Label et valeur du slider */}
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: '0.8rem',
-                color: '#ffd93d',
-                textShadow: '2px 2px 0px rgba(0, 0, 0, 0.8)',
-            }}>
-                <span>{label}</span>
-                <span>{Math.round(value * 100)}%</span>
-            </div>
-
-            {/* Slider HTML5 personnalisé */}
-            <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={value}
-                onChange={(e) => onChange(parseFloat(e.target.value))}
-                style={{
-                    width: '100%',
-                    height: '8px',
-                    cursor: 'pointer',
-                    accentColor: '#6bcf7f',
-                }}
-            />
-        </div>
-    );
-};

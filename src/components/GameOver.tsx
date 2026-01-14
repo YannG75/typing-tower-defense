@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import * as React from "react";
+import {MenuButton} from "./MenuButton";
 
 interface GameOverProps {
     score: number;
@@ -8,13 +9,13 @@ interface GameOverProps {
     isMobile?: boolean;
 }
 
-export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart, isMobile }) => {
+export const GameOver: React.FC<GameOverProps> = ({score, highScore, onRestart, isMobile}) => {
     const isNewHighScore = score >= highScore;
     return (
         <motion.div
-            initial={{ opacity: 0, transform: 'translate(-50%, -50%) scale(0.8)'}}
-            animate={{ opacity: 1, transform: 'translate(-50%, -50%) scale(1)' }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            initial={{opacity: 0, transform: 'translate(-50%, -50%) scale(0.8)'}}
+            animate={{opacity: 1, transform: 'translate(-50%, -50%) scale(1)'}}
+            transition={{duration: 0.5, ease: 'easeOut'}}
             style={{
                 position: 'absolute',
                 top: '50%',
@@ -26,13 +27,13 @@ export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart,
                 textAlign: 'center',
                 boxShadow: '0 0 40px rgba(255, 107, 107, 0.6), inset 0 0 40px rgba(255, 107, 107, 0.1)',
                 zIndex: 100,
-                minWidth: isMobile ? '90%' :'400px',
+                minWidth: isMobile ? '90%' : '400px',
             }}
         >
             <motion.h1
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
+                initial={{y: -20, opacity: 0}}
+                animate={{y: 0, opacity: 1}}
+                transition={{delay: 0.2}}
                 style={{
                     fontSize: '3rem',
                     marginBottom: '1rem',
@@ -44,9 +45,9 @@ export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart,
             </motion.h1>
 
             <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
+                initial={{scale: 0}}
+                animate={{scale: 1}}
+                transition={{delay: 0.4, type: 'spring', stiffness: 200}}
                 style={{
                     fontSize: '2rem',
                     margin: '2rem 0',
@@ -54,21 +55,21 @@ export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart,
                     textShadow: '2px 2px 0px rgba(0, 0, 0, 0.8)',
                 }}
             >
-                <div style={{ marginBottom: '0.5rem', fontSize: '0.8rem' }}>SCORE</div>
-                <div style={{ fontSize: '2rem' }}>{score.toString().padStart(6, '0')}</div>
+                <div style={{marginBottom: '0.5rem', fontSize: '0.8rem'}}>SCORE</div>
+                <div style={{fontSize: '2rem'}}>{score.toString().padStart(6, '0')}</div>
             </motion.div>
 
             {isNewHighScore && (
                 <motion.div
-                    initial={{ scale: 0, rotate: -10 }}
+                    initial={{scale: 0, rotate: -10}}
                     animate={{
                         scale: [1, 1.2, 1],
                         rotate: [0, 5, -5, 0]
                     }}
                     transition={{
                         delay: 0.6,
-                        scale: { repeat: Infinity, duration: 0.8 },
-                        rotate: { duration: 0.5 }
+                        scale: {repeat: Infinity, duration: 0.8},
+                        rotate: {duration: 0.5}
                     }}
                     style={{
                         fontSize: '1rem',
@@ -83,9 +84,9 @@ export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart,
 
             {!isNewHighScore && (
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.6 }}
-                    transition={{ delay: 0.6 }}
+                    initial={{opacity: 0}}
+                    animate={{opacity: 0.6}}
+                    transition={{delay: 0.6}}
                     style={{
                         fontSize: '0.7rem',
                         color: '#ffffff',
@@ -96,27 +97,9 @@ export const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart,
                 </motion.div>
             )}
 
-            <motion.button
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 , transition: { delay: 0.6 }}}
-                whileHover={{ scale: 1.1, transition: { duration: 0.150}}}
-                whileTap={{ scale: 0.95 }}
-                onClick={onRestart}
-                style={{
-                    padding: '1rem 3rem',
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold',
-                    color: '#ffffff',
-                    background: 'transparent',
-                    border: '4px solid #ffffff',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 0px rgba(0, 0, 0, 0.8), 0 0 20px rgba(197,107,207,0.6)',
-                    transition: 'all 0.150s ease',
-                    letterSpacing: '1px',
-                }}
-            >
+            <MenuButton onClick={onRestart} delay={0.6} variant="secondary">
                 RETRY
-            </motion.button>
+            </MenuButton>
         </motion.div>
     );
 };
