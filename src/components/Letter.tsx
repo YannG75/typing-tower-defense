@@ -2,7 +2,7 @@ import {type AnyResolvedKeyframe, motion} from 'framer-motion';
 import type {LetterData} from '../types/game.types';
 import {getSpawnPosition} from "../utils/spawnHelpers";
 import * as React from "react";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 
 interface LetterProps {
     letter: LetterData;
@@ -29,7 +29,7 @@ const getScale = () => {
 export const Letter: React.FC<LetterProps> = ({letter, onReachBase, isDestroyed = false, isPaused = false}) => {
     const positions = getSpawnPosition(letter.direction)
     const [ letterPositions, setLetterPositions ] =useState<LetterPosition>({x:positions.animate.x, y:positions.animate.y})
-    const color = getRandomColor();
+    const color = useMemo(() => getRandomColor(), []);
     const scale = getScale();
     return (
         <motion.div

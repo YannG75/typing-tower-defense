@@ -56,7 +56,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({onStart, isMobile}) => {
             >
                 TYPING
                 <br/>
-                LETTER
+                TOWER
                 <br/>
                 DEFENSE
             </motion.h1>
