@@ -80,7 +80,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({onStart, isMobile}) => {
                     textAlign: 'center',
                 }}
             >
-                PRESS ANY KEY {isMobile && 'OR TAP SCREEN'} TO START
+                {isMobile ? 'TAP SCREEN' : 'PRESS ANY KEY'} TO START
             </motion.div>
 
             {/* Instructions */}
@@ -98,7 +98,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({onStart, isMobile}) => {
                     lineHeight: 1.5
                 }}
             >
-                USE KEYBOARD TO DESTROY LETTERS (ZQSD)
+                 {isMobile ? 'TAP KEY' : 'USE KEYBOARD'} TO DESTROY LETTERS (ZQSD)
                 <br/>
                 PROTECT YOUR BASE
             </motion.div>

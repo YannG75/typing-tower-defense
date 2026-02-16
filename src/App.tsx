@@ -12,8 +12,6 @@ import {StartMenu} from './components/StartMenu';
 import {PauseMenu} from './components/PauseMenu';
 import {Particles} from "./components/Particles.tsx";
 import {useLocalStorage} from "./hooks/useLocalStorage.ts";
-import {MobileIncoming} from "./components/MobileIncoming";
-
 // Lettres disponibles
 const AVAILABLE_LETTERS = ['Z', 'Q', 'S', 'D'];
 
@@ -69,6 +67,10 @@ function App() {
         };
     }, []);
 
+    const handlePause = () => {
+        setIsPaused((prev) => !prev);
+    }
+
     // Jouer la musique une seule fois au montage
     useEffect(() => {
         if (!hasPlayedMusic.current && gameStarted) {
@@ -84,7 +86,6 @@ function App() {
                 setIsPaused((prev) => !prev);
             }
         };
-
         window.addEventListener('keydown', handleEsc);
         return () => window.removeEventListener('keydown', handleEsc);
     }, [gameStarted, isGameOver, setIsPaused]);
@@ -133,10 +134,10 @@ function App() {
 
     useEffect(() => {
         const handleCustomTap = () => {
-            if (tapCount < 2) {
+            if (tapCount < 4) {
                 setTapCount((prev) => prev + 1);
             }
-            if (tapCount === 2) {
+            if (tapCount === 4) {
                 if (!devMod) setDevMod(true);
             }
         }
@@ -235,13 +236,11 @@ function App() {
             <div className="game-container no-select"
             >
 
-                {isMobile && !devMod && <MobileIncoming/>}
-                {(!gameStarted && !isMobile || (!gameStarted && isMobile && devMod)) && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
-
+                {(!gameStarted) && <StartMenu onStart={handleStart} isMobile={isMobile}/>}
 
                 {gameStarted && (
                     <>
-                        <UI score={score} level={level} highScore={highScore} isMobile={isMobile} handleKeyTap={handleKey}/>
+                        <UI score={score} level={level} highScore={highScore} isMobile={isMobile} handleKeyTap={handleKey} handlePauseKey={handlePause}/>
 
                         {letters.map((letter) => (
                             <Letter

@@ -4,11 +4,16 @@ import * as React from "react";
 
 interface MobileButtonProps {
     letter: string;
-    onTap: (key: string) => void;
+    onTap?: (key: string) => void;
+    handlePause?: () => void;
+    isPauseButton?: boolean;
 }
 
-export const MobileButton: React.FC<MobileButtonProps> = ({ letter, onTap }) => {
+export const MobileButton: React.FC<MobileButtonProps> = ({ letter, onTap, handlePause, isPauseButton = false }) => {
     const [isPressed, setIsPressed] = useState(false);
+
+    // Dimensions adaptées selon le type de bouton
+    const buttonSize = isPauseButton ? { width: '55px', height: '55px', padding: '8px' } : { width: '60px', height: '60px', padding: '20px 25px' };
 
     return (
         <motion.div
@@ -17,15 +22,22 @@ export const MobileButton: React.FC<MobileButtonProps> = ({ letter, onTap }) => 
             onTouchStart={(e) => {
                 setIsPressed(true);
                 e.stopPropagation();
-                onTap(letter);
+                if (onTap) {
+                    onTap(letter);
+                }
+                if (handlePause) {
+                    handlePause();
+                }
             }}
             onTouchEnd={() => setIsPressed(false)}
             style={{
                 border: '2px solid #ffd93d',
                 boxShadow: isPressed ? '0 0 20px #ffd93d' : '0 0 10px #ffd93d',
-                padding: '20px 25px',
-                minWidth: '60px',          // ← Ajoute ça
-                minHeight: '60px',
+                width: buttonSize.width,
+                height: buttonSize.height,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 background: isPressed ? 'rgba(255, 217, 61, 0.7)' : 'transparent',
                 cursor: 'pointer',
                 userSelect: 'none',
@@ -33,7 +45,7 @@ export const MobileButton: React.FC<MobileButtonProps> = ({ letter, onTap }) => 
             }}
         >
             <p style={{
-                fontSize: '1.5rem',
+                fontSize: isPauseButton ? '1.8rem' : '1.5rem',
                 textAlign: 'center',
                 fontWeight: 'bold',
                 color: '#ffd93d',
