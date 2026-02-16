@@ -1,5 +1,6 @@
 
 export type Direction = 'top' | 'bottom' | 'left' | 'right';
+
 export interface LetterData {
     id: string;
     character: string;
@@ -9,7 +10,12 @@ export interface LetterData {
     direction: Direction;
 }
 
-
+export interface Particle {
+    id: string;
+    x: number;
+    y: number;
+    color: string;
+}
 
 export interface GameState {
     score: number;

@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-
-const MUSIC_VOLUME_FACTOR = 0.2;
-const SFX_VOLUME_FACTOR = 0.3;
+import { GAME_CONFIG } from '../constants/game';
 
 export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     const audioContext = useRef<AudioContext | null>(null);
@@ -58,7 +56,10 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     // Initialize audio context and load sounds
     useEffect(() => {
         // Create audio context for SFX (Web Audio API for better mobile performance)
-        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        // Handle both standard and webkit-prefixed AudioContext
+        const AudioContextClass = window.AudioContext ||
+            (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        const ctx = new AudioContextClass();
         audioContext.current = ctx;
 
         // Create gain nodes for volume control
@@ -108,15 +109,15 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     // Update volumes when changed
     useEffect(() => {
         if (musicGainNode.current) {
-            musicGainNode.current.gain.value = musicVolume * MUSIC_VOLUME_FACTOR;
+            musicGainNode.current.gain.value = musicVolume * GAME_CONFIG.MUSIC_VOLUME_FACTOR;
         }
 
         if (sfxGainNode.current) {
-            sfxGainNode.current.gain.value = sfxVolume * SFX_VOLUME_FACTOR;
+            sfxGainNode.current.gain.value = sfxVolume * GAME_CONFIG.SFX_VOLUME_FACTOR;
         }
 
         if (gameLoopSound.current) {
-            gameLoopSound.current.volume = musicVolume * MUSIC_VOLUME_FACTOR;
+            gameLoopSound.current.volume = musicVolume * GAME_CONFIG.MUSIC_VOLUME_FACTOR;
         }
     }, [musicVolume, sfxVolume]);
 

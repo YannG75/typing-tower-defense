@@ -1,42 +1,33 @@
 import {motion} from 'framer-motion';
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useEffect, useRef} from "react";
+import {useScreenShake} from "../hooks/useScreenShake.ts";
 
 interface BaseProps {
     lives: number;
 }
 
 export const Base: React.FC<BaseProps> = ({lives}) => {
-    const [isShaking, setIsShaking] = useState(false);
-    const [previousLives, setPreviousLives] = useState(lives);
+    const previousLives = useRef(lives);
+    const { trigger: triggerShake, offset: shakeOffset, isShaking } = useScreenShake({ duration: 500, intensity: 15 });
 
     // Déclencher le shake quand les vies diminuent
     useEffect(() => {
-        if (lives < previousLives) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setIsShaking(true);
-            setTimeout(() => setIsShaking(false), 400);
+        if (lives < previousLives.current) {
+            triggerShake();
         }
-        setPreviousLives(lives);
-    }, [lives, previousLives]);
+        previousLives.current = lives;
+    }, [lives]);
 
 
     return (
         <motion.div
-            animate={isShaking ? {
-                x: ['-50%', '-58%','-42%', '-58%', '-42%', '-54%', '-46%', '-50%'], // Shake horizontal
-                y: '-50%',
-                transition: { duration: 0.4 }
-            } : {
-                x: '-50%', // ← Centre horizontal
-                y: '-50%', // ← Centre vertical
-            }}
             style={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
-                x: '-50%',
-                y: '-50%',
+                translate: '-50% -50%',
+                transform: `translate(calc(-50% + ${shakeOffset.x}px), calc(-50% + ${shakeOffset.y}px))`,
                 width: '120px',
                 height: '120px',
                 display: 'flex',

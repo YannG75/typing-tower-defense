@@ -3,6 +3,7 @@ import type {LetterData} from '../types/game.types';
 import {getSpawnPosition} from "../utils/spawnHelpers";
 import * as React from "react";
 import {useMemo, useState} from "react";
+import {LETTER_COLORS} from '../constants/game';
 
 interface LetterProps {
     letter: LetterData;
@@ -15,8 +16,6 @@ interface LetterPosition {
     x: AnyResolvedKeyframe;
     y: AnyResolvedKeyframe;
 }
-
-const LETTER_COLORS = ['#ffd93d', '#6bcf7f', '#4ecdc4', '#a084dc', '#f06292', '#ff6b6b'];
 
 const getRandomColor = () => {
     return LETTER_COLORS[Math.floor(Math.random() * LETTER_COLORS.length)];
