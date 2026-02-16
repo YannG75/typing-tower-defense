@@ -261,6 +261,7 @@ function App() {
                                 sfxVolume={sfxVolume}
                                 onMusicVolumeChange={setMusicVolume}
                                 onSfxVolumeChange={setSfxVolume}
+                                isMobile={isMobile}
                             />
                         )}
 

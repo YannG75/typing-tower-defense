@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import * as React from "react";
+import { LuPause } from "react-icons/lu";
 
 interface MobileButtonProps {
     letter: string;
@@ -44,7 +45,12 @@ export const MobileButton: React.FC<MobileButtonProps> = ({ letter, onTap, handl
                 transition: 'all 0.1s',
             }}
         >
-            <p style={{
+            {isPauseButton ?
+                (<LuPause style={{color: '#ffd93d',
+                fontSize: isPauseButton ? '1.8rem' : '1.5rem',
+                textShadow: '2px 2px 0px rgba(0,0,0,0.8)',}} />)
+                :
+                (<p style={{
                 fontSize: isPauseButton ? '1.8rem' : '1.5rem',
                 textAlign: 'center',
                 fontWeight: 'bold',
@@ -53,7 +59,7 @@ export const MobileButton: React.FC<MobileButtonProps> = ({ letter, onTap, handl
                 margin: 0,
             }}>
                 {letter}
-            </p>
+            </p>)}
         </motion.div>
     );
 };

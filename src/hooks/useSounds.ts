@@ -1,86 +1,153 @@
-import { useEffect, useRef } from 'react';
-import * as React from "react";
+import { useEffect, useRef, useState } from 'react';
+
+const MUSIC_VOLUME_FACTOR = 0.2;
+const SFX_VOLUME_FACTOR = 0.3;
+
 export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
-    const explosionSound = useRef<HTMLAudioElement | null>(null);
-    const hitSound = useRef<HTMLAudioElement | null>(null);
-    const gameOverSound = useRef<HTMLAudioElement | null>(null);
+    const audioContext = useRef<AudioContext | null>(null);
+    const [isTabVisible, setIsTabVisible] = useState(true);
+
+    // Audio buffers for Web Audio API (better mobile performance)
+    const audioBuffers = useRef<{
+        explosion: AudioBuffer | null;
+        hit: AudioBuffer | null;
+        gameOver: AudioBuffer | null;
+    }>({
+        explosion: null,
+        hit: null,
+        gameOver: null,
+    });
+
+    // HTML Audio for music loop (easier looping)
     const gameLoopSound = useRef<HTMLAudioElement | null>(null);
+    const musicGainNode = useRef<GainNode | null>(null);
+    const sfxGainNode = useRef<GainNode | null>(null);
 
+    // Handle tab visibility changes
     useEffect(() => {
-        // Précharger les sons
-        const explosion = new Audio('/sounds/boom.wav');
-        const hit = new Audio('/sounds/hit.wav');
-        const gameOver = new Audio('/sounds/gameOver.wav');
-        const gameLoop = new Audio('/sounds/gameLoop.mp3');
+        const handleVisibilityChange = () => {
+            const isVisible = !document.hidden;
+            setIsTabVisible(isVisible);
 
-        gameLoop.loop = true;
+            // Pause/resume music based on visibility
+            if (gameLoopSound.current) {
+                if (isVisible) {
+                    gameLoopSound.current.play().catch(() => {});
+                } else {
+                    gameLoopSound.current.pause();
+                }
+            }
 
-        explosionSound.current = explosion;
-        hitSound.current = hit;
-        gameOverSound.current = gameOver;
-        gameLoopSound.current = gameLoop;
-
-        return () => {
-            [explosion, hit, gameOver, gameLoop].forEach(sound => {
-                sound.pause();
-                sound.src = "";
-            });
-        };
-    }, []);
-
-    useEffect(() => {
-        const MUSIC_VOLUME_FACTOR = 0.2;
-        const SFX_VOLUME_FACTOR = 0.3;
-
-        // Fonction pour mettre à jour le volume d'un son
-        const updateVolume = (ref: React.RefObject<HTMLAudioElement | null>, volume: number) => {
-            if (ref.current) {
-                ref.current.volume = volume;
+            // Suspend/resume audio context on mobile to save resources
+            if (audioContext.current) {
+                if (isVisible) {
+                    audioContext.current.resume().catch(() => {});
+                } else {
+                    audioContext.current.suspend().catch(() => {});
+                }
             }
         };
 
-        // Musique
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, []);
+
+    // Initialize audio context and load sounds
+    useEffect(() => {
+        // Create audio context for SFX (Web Audio API for better mobile performance)
+        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        audioContext.current = ctx;
+
+        // Create gain nodes for volume control
+        const musicGain = ctx.createGain();
+        const sfxGain = ctx.createGain();
+        musicGain.connect(ctx.destination);
+        sfxGain.connect(ctx.destination);
+        musicGainNode.current = musicGain;
+        sfxGainNode.current = sfxGain;
+
+        // Load and decode audio buffers for SFX
+        const loadSound = async (url: string): Promise<AudioBuffer | null> => {
+            try {
+                const response = await fetch(url);
+                const arrayBuffer = await response.arrayBuffer();
+                return await ctx.decodeAudioData(arrayBuffer);
+            } catch (error) {
+                console.error(`Failed to load sound: ${url}`, error);
+                return null;
+            }
+        };
+
+        // Load all SFX
+        Promise.all([
+            loadSound('/sounds/boom.wav'),
+            loadSound('/sounds/hit.wav'),
+            loadSound('/sounds/gameOver.wav'),
+        ]).then(([explosion, hit, gameOver]) => {
+            audioBuffers.current = { explosion, hit, gameOver };
+        });
+
+        // Setup music loop with HTML Audio
+        const gameLoop = new Audio('/sounds/gameLoop.mp3');
+        gameLoop.loop = true;
+        gameLoopSound.current = gameLoop;
+
+        return () => {
+            // Cleanup
+            ctx.close();
+            if (gameLoop) {
+                gameLoop.pause();
+                gameLoop.src = "";
+            }
+        };
+    }, []);
+
+    // Update volumes when changed
+    useEffect(() => {
+        if (musicGainNode.current) {
+            musicGainNode.current.gain.value = musicVolume * MUSIC_VOLUME_FACTOR;
+        }
+
+        if (sfxGainNode.current) {
+            sfxGainNode.current.gain.value = sfxVolume * SFX_VOLUME_FACTOR;
+        }
+
         if (gameLoopSound.current) {
             gameLoopSound.current.volume = musicVolume * MUSIC_VOLUME_FACTOR;
-            gameLoopSound.current.pause();
-            gameLoopSound.current.play().catch(() => {
-            });
         }
-
-        // SFX
-        const sfxVolumeLevel = sfxVolume * SFX_VOLUME_FACTOR;
-        [explosionSound, hitSound, gameOverSound].forEach(soundRef =>
-            updateVolume(soundRef, sfxVolumeLevel)
-        );
     }, [musicVolume, sfxVolume]);
 
+    // Play sound using Web Audio API (fast on mobile)
+    const playSound = (buffer: AudioBuffer | null) => {
+        if (!buffer || !audioContext.current || !sfxGainNode.current || !isTabVisible) return;
+
+        const source = audioContext.current.createBufferSource();
+        source.buffer = buffer;
+        source.connect(sfxGainNode.current);
+        source.start(0);
+    };
+
     const playExplosion = () => {
-        if (explosionSound.current) {
-            explosionSound.current.currentTime = 0;
-            explosionSound.current.play().catch(() => {});
-        }
+        playSound(audioBuffers.current.explosion);
     };
 
     const playHit = () => {
-        if (hitSound.current) {
-            hitSound.current.currentTime = 0;
-            hitSound.current.play().catch(() => {});
-        }
+        playSound(audioBuffers.current.hit);
     };
 
     const playGameOver = () => {
-        if (gameOverSound.current) {
-            gameOverSound.current.currentTime = 0;
-            gameOverSound.current.play().catch(() => {});
-        }
+        playSound(audioBuffers.current.gameOver);
     };
 
     const playGameLoop = () => {
-        if (gameLoopSound.current) {
+        if (gameLoopSound.current && isTabVisible) {
             gameLoopSound.current.currentTime = 0;
             gameLoopSound.current.play().catch(() => {});
         }
-    }
+    };
 
     return { playExplosion, playHit, playGameOver, playGameLoop };
 };

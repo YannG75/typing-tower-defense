@@ -90,7 +90,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({onStart, isMobile}) => {
                 transition={{delay: 1.5}}
                 style={{
                     position: 'absolute',
-                    bottom: '50px',
+                    bottom: isMobile ? '100px' : '50px',
                     fontSize: '0.7rem',
                     color: '#ffffff',
                     textAlign: 'center',

@@ -49,7 +49,7 @@ export const UI: React.FC<UIProps> = ({score, level, highScore, isMobile, handle
 
                     {/* Zone droite: Bouton pause isolé */}
                     <MobileButton
-                        letter="⏸"
+                        letter="||"
                         handlePause={handlePauseKey}
                         isPauseButton={true}
                     />

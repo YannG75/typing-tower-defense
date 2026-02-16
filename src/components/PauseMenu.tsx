@@ -12,6 +12,7 @@ interface PauseMenuProps {
     sfxVolume: number;
     onMusicVolumeChange: (volume: number) => void;
     onSfxVolumeChange: (volume: number) => void;
+    isMobile?: boolean;
 }
 
 export const PauseMenu: React.FC<PauseMenuProps> =
@@ -22,7 +23,8 @@ export const PauseMenu: React.FC<PauseMenuProps> =
          musicVolume,
          sfxVolume,
          onSfxVolumeChange,
-         onMusicVolumeChange
+         onMusicVolumeChange,
+        isMobile = false
      }) => {
         const [showOptions, setShowOptions] = useState(false);
         return (
@@ -84,7 +86,7 @@ export const PauseMenu: React.FC<PauseMenuProps> =
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '2rem',
-                            minWidth: '400px',
+                            minWidth: isMobile ? '300px' : '400px',
                         }}
                     >
                         <VolumeSlider
@@ -111,7 +113,7 @@ export const PauseMenu: React.FC<PauseMenuProps> =
                     transition={{delay: 0.6}}
                     style={{
                         position: 'absolute',
-                        bottom: '50px',
+                        bottom: isMobile ? '100px' : '50px',
                         fontSize: '0.7rem',
                         color: '#ffffff',
                     }}
