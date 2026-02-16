@@ -17,7 +17,7 @@ export const Base: React.FC<BaseProps> = ({lives}) => {
             triggerShake();
         }
         previousLives.current = lives;
-    }, [lives]);
+    }, [lives,triggerShake]);
 
 
     return (
@@ -26,7 +26,6 @@ export const Base: React.FC<BaseProps> = ({lives}) => {
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
-                translate: '-50% -50%',
                 transform: `translate(calc(-50% + ${shakeOffset.x}px), calc(-50% + ${shakeOffset.y}px))`,
                 width: '120px',
                 height: '120px',
