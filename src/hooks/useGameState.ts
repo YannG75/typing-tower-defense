@@ -39,19 +39,32 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver, onGame
     useEffect(() => {
         const handleVisibilityChange = () => {
             const isVisible = !document.hidden;
-                // Pause/resume music based on visibility
-                if (!isVisible) {
-                    if (gameStarted && !isGameOver) pauseGame()
-                    onGameHide?.();
-                }
-                else {
-                    onGameVisible?.();
-                }
+            // Pause/resume music based on visibility
+            if (!isVisible) {
+                if (gameStarted && !isGameOver) pauseGame()
+                onGameHide?.();
+            } else {
+                onGameVisible?.();
+            }
         };
+
+        const handleBlur = () => {
+            if (gameStarted && !isGameOver) pauseGame()
+            onGameHide?.();
+        };
+
+        const handleFocus = () => {
+            onGameVisible?.();
+        };
+
         document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('blur', handleBlur);
+        window.addEventListener('focus', handleFocus);
 
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleBlur);
+            window.removeEventListener('focus', handleFocus);
         };
     }, [gameStarted, isGameOver]);
 
