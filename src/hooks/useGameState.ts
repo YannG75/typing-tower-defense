@@ -33,6 +33,25 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver }: UseG
     const [destroyedLetters, setDestroyedLetters] = useState<string[]>([]);
     const [particles, setParticles] = useState<Particle[]>([]);
 
+    // Handle tab visibility changes
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            const isVisible = !document.hidden;
+
+            // Pause/resume music based on visibility
+                if (isVisible) {
+                    resumeGame()
+                } else {
+                    pauseGame()
+                }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, []);
+
     // Spawn a new letter
     const spawnLetter = useCallback(() => {
         const newLetter: LetterData = {
