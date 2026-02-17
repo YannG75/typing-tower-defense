@@ -88,18 +88,39 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
             loadSound('/sounds/hit.wav'),
             loadSound('/sounds/gameOver.wav'),
         ]).then(([explosion, hit, gameOver]) => {
-            audioBuffers.current = { explosion, hit, gameOver };
+            audioBuffers.current = {explosion, hit, gameOver};
         });
 
         // Setup music loop with HTML Audio
         const gameLoop = new Audio('/sounds/gameLoop.mp3');
         gameLoop.loop = true;
+        gameLoop.preload = 'auto';
+        gameLoop.load();
         gameLoopSound.current = gameLoop;
-        gameLoopSound.current.play().catch(() => {});
-        gameLoopSound.current.pause()
+
+        // Add a user interaction handler to unlock audio on mobile
+        const unlockAudio = () => {
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
+            // Play and immediately pause to unlock HTML Audio
+            if (gameLoop.paused) {
+                gameLoop.play().catch(() => {});
+            }
+        };
+
+        // Listen for first user interaction to unlock audio
+        const events = ['touchstart', 'touchend', 'mousedown', 'keydown'];
+        events.forEach(event => {
+            document.addEventListener(event, unlockAudio, {once: true});
+        });
 
         return () => {
-            // Cleanup
+            // Cleanup event listeners
+            events.forEach(event => {
+                document.removeEventListener(event, unlockAudio);
+            });
+            // Cleanup audio
             ctx.close();
             if (gameLoop) {
                 gameLoop.pause();

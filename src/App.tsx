@@ -20,7 +20,7 @@ function App() {
     const [sfxVolume, setSfxVolume] = useLocalStorage('sfx-volume', 1);
 
     // Audio and effects
-    const {playExplosion, playHit, playGameOver, playGameLoop} = useSounds(musicVolume, sfxVolume);
+    const {playExplosion, playHit, playGameOver} = useSounds(musicVolume, sfxVolume);
     const { trigger: triggerShake, offset: shakeOffset } = useScreenShake({ duration: 500, intensity: 15 });
     const hasPlayedMusic = useRef(false);
 
@@ -64,10 +64,9 @@ function App() {
     // Play music once when game starts
     useEffect(() => {
         if (!hasPlayedMusic.current && gameState.gameStarted) {
-            playGameLoop();
             hasPlayedMusic.current = true;
         }
-    }, [gameState.gameStarted, playGameLoop]);
+    }, [gameState.gameStarted]);
 
     // Handle ESC key for pause
     useEffect(() => {
