@@ -39,23 +39,21 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver, onGame
     useEffect(() => {
         const handleVisibilityChange = () => {
             const isVisible = !document.hidden;
-            if (gameStarted) {
                 // Pause/resume music based on visibility
                 if (!isVisible) {
-                    pauseGame()
+                    if (gameStarted && !isGameOver) pauseGame()
                     onGameHide?.();
                 }
                 else {
                     onGameVisible?.();
                 }
-            }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [gameStarted]);
+    }, [gameStarted, isGameOver]);
 
     // Spawn a new letter
     const spawnLetter = useCallback(() => {
