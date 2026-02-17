@@ -37,11 +37,8 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver }: UseG
     useEffect(() => {
         const handleVisibilityChange = () => {
             const isVisible = !document.hidden;
-
             // Pause/resume music based on visibility
-                if (isVisible) {
-                    resumeGame()
-                } else {
+                if (!isVisible) {
                     pauseGame()
                 }
         };
@@ -131,6 +128,7 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver }: UseG
     }, []);
 
     const pauseGame = useCallback(() => {
+        if (isGameOver) return;
         setIsPaused((prev) => !prev);
     }, []);
 
