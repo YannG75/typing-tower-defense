@@ -95,6 +95,8 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
         const gameLoop = new Audio('/sounds/gameLoop.mp3');
         gameLoop.loop = true;
         gameLoopSound.current = gameLoop;
+        gameLoopSound.current.play().catch(() => {});
+        gameLoopSound.current.pause()
 
         return () => {
             // Cleanup
