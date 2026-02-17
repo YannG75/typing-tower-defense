@@ -67,7 +67,7 @@ function App() {
             playGameLoop();
             hasPlayedMusic.current = true;
         }
-    }, [playGameLoop, gameState.gameStarted]);
+    }, [gameState.gameStarted, playGameLoop]);
 
     // Handle ESC key for pause
     useEffect(() => {

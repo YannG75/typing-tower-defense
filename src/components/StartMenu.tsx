@@ -100,6 +100,8 @@ export const StartMenu: React.FC<StartMenuProps> = ({onStart, isMobile}) => {
             >
                  {isMobile ? 'TAP KEY' : 'USE KEYBOARD'} TO DESTROY LETTERS (ZQSD)
                 <br/>
+                PRESS ESC TO PAUSE
+                <br/>
                 PROTECT YOUR BASE
             </motion.div>
         </motion.div>

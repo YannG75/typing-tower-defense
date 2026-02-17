@@ -144,9 +144,21 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     };
 
     const playGameLoop = () => {
-        if (gameLoopSound.current && isTabVisible) {
-            gameLoopSound.current.currentTime = 0;
-            gameLoopSound.current.play().catch(() => {});
+        if (!gameLoopSound.current || !isTabVisible) return;
+
+        // On mobile, AudioContext starts suspended and needs to be resumed
+        // before any sound can play. Resume it here since this is triggered
+        // close to a user gesture (tapping "Start Game").
+        const ctx = audioContext.current;
+        const play = () => {
+            gameLoopSound.current!.currentTime = 0;
+            gameLoopSound.current!.play().catch(() => {});
+        };
+
+        if (ctx && ctx.state === 'suspended') {
+            ctx.resume().then(play).catch(() => {});
+        } else {
+            play();
         }
     };
 
