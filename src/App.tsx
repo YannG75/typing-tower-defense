@@ -115,6 +115,7 @@ function App() {
                             onReachBase={gameState.handleLetterReachBase}
                             isDestroyed={gameState.destroyedLetters.includes(letter.id)}
                             isPaused={gameState.isPaused}
+                            isMobile={isMobile}
                         />
                     ))}
 

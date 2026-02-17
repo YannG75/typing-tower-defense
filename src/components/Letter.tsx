@@ -10,6 +10,7 @@ interface LetterProps {
     onReachBase: (id: string) => void;
     isDestroyed?: boolean;
     isPaused?: boolean;
+    isMobile?: boolean;
 }
 
 interface LetterPosition {
@@ -21,15 +22,18 @@ const getRandomColor = () => {
     return LETTER_COLORS[Math.floor(Math.random() * LETTER_COLORS.length)];
 }
 
-const getScale = () => {
+const getScale = (isMobile : boolean) => {
+    if (isMobile) {
+        return (Math.random() + 0.5) * 1.5;
+    }
     return (Math.random() + 0.5) * 3;
 }
 
-export const Letter: React.FC<LetterProps> = ({letter, onReachBase, isDestroyed = false, isPaused = false}) => {
+export const Letter: React.FC<LetterProps> = ({letter, onReachBase, isDestroyed = false, isPaused = false, isMobile=false}) => {
     const positions = getSpawnPosition(letter.direction)
     const [ letterPositions, setLetterPositions ] =useState<LetterPosition>({x:positions.animate.x, y:positions.animate.y})
     const color = useMemo(() => getRandomColor(), []);
-    const scale = getScale();
+    const scale = getScale(isMobile);
     return (
         <motion.div
             data-letter-id={letter.id}
