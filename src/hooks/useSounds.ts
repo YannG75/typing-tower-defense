@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { GAME_CONFIG } from '../constants/game';
+import {useEffect, useRef, useState} from 'react';
+import {GAME_CONFIG} from '../constants/game';
 
 export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     const audioContext = useRef<AudioContext | null>(null);
@@ -20,38 +20,6 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     const gameLoopSound = useRef<HTMLAudioElement | null>(null);
     const musicGainNode = useRef<GainNode | null>(null);
     const sfxGainNode = useRef<GainNode | null>(null);
-
-    // Handle tab visibility changes
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            const isVisible = !document.hidden;
-            setIsTabVisible(isVisible);
-
-            // Pause/resume music based on visibility
-            if (gameLoopSound.current) {
-                if (isVisible) {
-                    gameLoopSound.current.play().catch(() => {});
-                } else {
-                    gameLoopSound.current.pause();
-                }
-            }
-
-            // Suspend/resume audio context on mobile to save resources
-            if (audioContext.current) {
-                if (isVisible) {
-                    audioContext.current.resume().catch(() => {});
-                } else {
-                    audioContext.current.suspend().catch(() => {});
-                }
-            }
-        };
-
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-    }, []);
 
     // Initialize audio context and load sounds
     useEffect(() => {
@@ -154,6 +122,29 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
         source.start(0);
     };
 
+    const pauseSounds = () => {
+        setIsTabVisible(false);
+        if (gameLoopSound.current) {
+            gameLoopSound.current.pause();
+        }
+        if (audioContext.current) {
+            audioContext.current.suspend().catch(() => {});
+        }
+    }
+
+    const resumeSounds = () => {
+        setIsTabVisible(true);
+        if (gameLoopSound.current) {
+            console.log('resuming game loop sound')
+            gameLoopSound.current.play().catch(() => {});
+        }
+        if (audioContext.current) {
+            console.log('resuming audio context')
+            audioContext.current.resume().catch(() => {});
+        }
+    }
+
+
     const playExplosion = () => {
         playSound(audioBuffers.current.explosion);
     };
@@ -175,15 +166,17 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
         const ctx = audioContext.current;
         const play = () => {
             gameLoopSound.current!.currentTime = 0;
-            gameLoopSound.current!.play().catch(() => {});
+            gameLoopSound.current!.play().catch(() => {
+            });
         };
 
         if (ctx && ctx.state === 'suspended') {
-            ctx.resume().then(play).catch(() => {});
+            ctx.resume().then(play).catch(() => {
+            });
         } else {
             play();
         }
     };
 
-    return { playExplosion, playHit, playGameOver, playGameLoop };
+    return {playExplosion, playHit, playGameOver, playGameLoop, pauseSounds, resumeSounds};
 };

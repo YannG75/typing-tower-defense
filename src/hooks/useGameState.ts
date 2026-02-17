@@ -10,13 +10,15 @@ interface UseGameStateOptions {
     onLifeLost?: () => void;
     onLetterDestroyed?: () => void;
     onGameOver?: () => void;
+    onGameHide?: () => void;
+    onGameVisible?: () => void;
 }
 
 /**
  * Custom hook that manages all game state and logic
  * Separates game mechanics from UI concerns
  */
-export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver }: UseGameStateOptions = {}) => {
+export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver, onGameHide, onGameVisible }: UseGameStateOptions = {}) => {
     // Game flow state
     const [gameStarted, setGameStarted] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -37,17 +39,23 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver }: UseG
     useEffect(() => {
         const handleVisibilityChange = () => {
             const isVisible = !document.hidden;
-            // Pause/resume music based on visibility
+            if (gameStarted) {
+                // Pause/resume music based on visibility
                 if (!isVisible) {
                     pauseGame()
+                    onGameHide?.();
                 }
+                else {
+                    onGameVisible?.();
+                }
+            }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, []);
+    }, [gameStarted]);
 
     // Spawn a new letter
     const spawnLetter = useCallback(() => {
@@ -128,9 +136,9 @@ export const useGameState = ({ onLifeLost, onLetterDestroyed, onGameOver }: UseG
     }, []);
 
     const pauseGame = useCallback(() => {
-        if (isGameOver) return;
-        setIsPaused((prev) => !prev);
-    }, []);
+        if (isGameOver || isPaused) return;
+        setIsPaused(true);
+    }, [isGameOver, isPaused]);
 
     const resumeGame = useCallback(() => {
         setIsPaused(false);

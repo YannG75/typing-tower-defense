@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Letter} from './components/Letter';
 import {Base} from './components/Base';
 import {UI} from './components/UI';
@@ -20,9 +20,8 @@ function App() {
     const [sfxVolume, setSfxVolume] = useLocalStorage('sfx-volume', 1);
 
     // Audio and effects
-    const {playExplosion, playHit, playGameOver} = useSounds(musicVolume, sfxVolume);
+    const {playExplosion, playHit, playGameOver, pauseSounds, resumeSounds} = useSounds(musicVolume, sfxVolume);
     const { trigger: triggerShake, offset: shakeOffset } = useScreenShake({ duration: 500, intensity: 15 });
-    const hasPlayedMusic = useRef(false);
 
     // Game state (all game logic is now in this hook)
     const gameState = useGameState({
@@ -35,6 +34,12 @@ function App() {
         },
         onGameOver: () => {
             playGameOver();
+        },
+        onGameHide: () => {
+            pauseSounds()
+        },
+        onGameVisible: () => {
+            resumeSounds()
         }
     });
 
@@ -60,13 +65,6 @@ function App() {
             window.removeEventListener('resize', handleChange);
         };
     }, []);
-
-    // Play music once when game starts
-    useEffect(() => {
-        if (!hasPlayedMusic.current && gameState.gameStarted) {
-            hasPlayedMusic.current = true;
-        }
-    }, [gameState.gameStarted]);
 
     // Handle ESC key for pause
     useEffect(() => {
