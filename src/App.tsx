@@ -54,7 +54,7 @@ function App() {
         };
 
         const handleChange = () => {
-            console.log(isMobileOrTablet() ? 'Mobile detected' : 'Desktop detected')
+            // console.log(isMobileOrTablet() ? 'Mobile detected' : 'Desktop detected')
             setIsMobile(isMobileOrTablet());
         };
 

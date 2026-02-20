@@ -60,7 +60,7 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
         });
 
         // Setup music loop with HTML Audio
-        const gameLoop = new Audio('/sounds/gameLoop.mp3');
+        const gameLoop = new Audio('/sounds/gameLoopC.mp3');
         gameLoop.loop = true;
         gameLoop.preload = 'auto';
         gameLoop.load();
@@ -135,11 +135,9 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
     const resumeSounds = () => {
         setIsTabVisible(true);
         if (gameLoopSound.current) {
-            console.log('resuming game loop sound')
             gameLoopSound.current.play().catch(() => {});
         }
         if (audioContext.current) {
-            console.log('resuming audio context')
             audioContext.current.resume().catch(() => {});
         }
     }
