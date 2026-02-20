@@ -62,9 +62,16 @@ export const useSounds = (musicVolume: number = 1, sfxVolume: number = 1) => {
         // Setup music loop with HTML Audio
         const gameLoop = new Audio('/sounds/gameLoopC.mp3');
         gameLoop.loop = true;
-        gameLoop.preload = 'auto';
-        gameLoop.load();
+        gameLoop.preload = 'none';
         gameLoopSound.current = gameLoop;
+
+        // Load in background once browser is idle (after critical assets)
+        const loadAudio = () => gameLoop.load();
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadAudio, { timeout: 3000 });
+        } else {
+            setTimeout(loadAudio, 2000);
+        }
 
         // Add a user interaction handler to unlock audio on mobile
         const unlockAudio = () => {
